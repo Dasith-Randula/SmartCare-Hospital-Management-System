@@ -2,6 +2,8 @@ package com.smartcare.hospital.service;
 
 import com.smartcare.hospital.entity.Department;
 import com.smartcare.hospital.entity.Doctor;
+import com.smartcare.hospital.exception.InvalidOperationException;
+import com.smartcare.hospital.exception.ResourceNotFoundException;
 import com.smartcare.hospital.repository.DepartmentRepository;
 import com.smartcare.hospital.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,7 @@ public class DepartmentService {
 
     public Department getDepartmentById(Long id) {
         return departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
     }
 
     public Department updateDepartment(Long id, Department departmentDetails) {
@@ -43,7 +45,7 @@ public class DepartmentService {
     public void deleteDepartment(Long id) {
         Department department = getDepartmentById(id);
         if (!doctorRepository.findByDepartmentDepartmentId(id).isEmpty()) {
-            throw new IllegalStateException("Cannot delete a department with assigned doctors");
+            throw new InvalidOperationException("Cannot delete a department with assigned doctors");
         }
         departmentRepository.delete(department);
     }
@@ -55,11 +57,11 @@ public class DepartmentService {
     public Department assignHeadDoctor(Long departmentId, Long doctorId) {
         Department department = getDepartmentById(departmentId);
         Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new RuntimeException("Doctor not found with id: " + doctorId));
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + doctorId));
 
         if (doctor.getDepartment() == null
                 || !departmentId.equals(doctor.getDepartment().getDepartmentId())) {
-            throw new IllegalArgumentException("Head doctor must belong to the same department");
+            throw new InvalidOperationException("Head doctor must belong to the same department");
         }
 
         department.setHeadDoctor(doctor);

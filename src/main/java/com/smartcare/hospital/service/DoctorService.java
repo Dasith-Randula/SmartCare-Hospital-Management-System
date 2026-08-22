@@ -2,6 +2,7 @@ package com.smartcare.hospital.service;
 
 import com.smartcare.hospital.entity.Department;
 import com.smartcare.hospital.entity.Doctor;
+import com.smartcare.hospital.exception.ResourceNotFoundException;
 import com.smartcare.hospital.repository.DepartmentRepository;
 import com.smartcare.hospital.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class DoctorService {
 
     public Doctor getDoctorById(Long id) {
         return doctorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Doctor not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
     }
 
     public Doctor updateDoctor(Long id, Doctor doctorDetails) {
@@ -63,12 +64,12 @@ public class DoctorService {
             throw new IllegalArgumentException("Department is required");
         }
         return departmentRepository.findById(doctor.getDepartment().getDepartmentId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Department not found with id: " + doctor.getDepartment().getDepartmentId()));
     }
 
     private void ensureDepartmentExists(Long departmentId) {
         departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new RuntimeException("Department not found with id: " + departmentId));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + departmentId));
     }
 }

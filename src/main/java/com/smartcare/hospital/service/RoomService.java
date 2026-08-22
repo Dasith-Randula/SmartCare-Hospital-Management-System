@@ -1,6 +1,7 @@
 package com.smartcare.hospital.service;
 
 import com.smartcare.hospital.entity.Room;
+import com.smartcare.hospital.exception.ResourceNotFoundException;
 import com.smartcare.hospital.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class RoomService {
 
     public Room getRoomById(Long id) {
         return roomRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Room not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
     }
 
     public Room updateRoom(Long id, Room roomDetails) {

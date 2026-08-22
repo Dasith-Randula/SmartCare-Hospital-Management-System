@@ -3,6 +3,8 @@ package com.smartcare.hospital.service;
 import com.smartcare.hospital.entity.Appointment;
 import com.smartcare.hospital.entity.Doctor;
 import com.smartcare.hospital.entity.Patient;
+import com.smartcare.hospital.exception.AppointmentConflictException;
+import com.smartcare.hospital.exception.ResourceNotFoundException;
 import com.smartcare.hospital.repository.AppointmentRepository;
 import com.smartcare.hospital.repository.DoctorRepository;
 import com.smartcare.hospital.repository.PatientRepository;
@@ -15,6 +17,7 @@ import java.util.List;
 public class AppointmentService {
 
     private static final String CANCELLED = "CANCELLED";
+    private static final String SCHEDULED = "SCHEDULED";
 
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
@@ -35,6 +38,7 @@ public class AppointmentService {
         ensureNoConflict(doctor.getDoctorId(), appointment);
         appointment.setPatient(patient);
         appointment.setDoctor(doctor);
+        appointment.setAppointmentStatus(SCHEDULED);
         return appointmentRepository.save(appointment);
     }
 
@@ -44,7 +48,7 @@ public class AppointmentService {
 
     public Appointment getAppointmentById(Long id) {
         return appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
     }
 
     public Appointment updateAppointment(Long id, Appointment appointmentDetails) {
@@ -54,8 +58,8 @@ public class AppointmentService {
                 || !java.util.Objects.equals(appointment.getAppointmentDate(), appointmentDetails.getAppointmentDate())
                 || !java.util.Objects.equals(appointment.getAppointmentTime(), appointmentDetails.getAppointmentTime());
 
-        validateAppointmentDate(appointmentDetails.getAppointmentDate());
         if (scheduleChanged) {
+            validateAppointmentDate(appointmentDetails.getAppointmentDate());
             ensureNoConflict(doctor.getDoctorId(), appointmentDetails);
         }
 
@@ -81,7 +85,7 @@ public class AppointmentService {
 
     public List<Appointment> getDoctorSchedule(Long doctorId, LocalDate date) {
         doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new RuntimeException("Doctor not found with id: " + doctorId));
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + doctorId));
         return appointmentRepository.findByDoctorDoctorIdAndAppointmentDateOrderByAppointmentTimeAsc(doctorId, date);
     }
 
@@ -94,7 +98,7 @@ public class AppointmentService {
     private void ensureNoConflict(Long doctorId, Appointment appointment) {
         if (appointmentRepository.existsByDoctorDoctorIdAndAppointmentDateAndAppointmentTimeAndAppointmentStatusNot(
                 doctorId, appointment.getAppointmentDate(), appointment.getAppointmentTime(), CANCELLED)) {
-            throw new IllegalStateException("Doctor already has an appointment at this date and time");
+            throw new AppointmentConflictException("Doctor already has an appointment at this date and time");
         }
     }
 
@@ -103,7 +107,7 @@ public class AppointmentService {
             throw new IllegalArgumentException("Patient is required");
         }
         return patientRepository.findById(appointment.getPatient().getPatientId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Patient not found with id: " + appointment.getPatient().getPatientId()));
     }
 
@@ -112,7 +116,7 @@ public class AppointmentService {
             throw new IllegalArgumentException("Doctor is required");
         }
         return doctorRepository.findById(appointment.getDoctor().getDoctorId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Doctor not found with id: " + appointment.getDoctor().getDoctorId()));
     }
 

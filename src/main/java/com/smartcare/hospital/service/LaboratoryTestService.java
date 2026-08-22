@@ -3,6 +3,7 @@ package com.smartcare.hospital.service;
 import com.smartcare.hospital.entity.Doctor;
 import com.smartcare.hospital.entity.LaboratoryTest;
 import com.smartcare.hospital.entity.Patient;
+import com.smartcare.hospital.exception.ResourceNotFoundException;
 import com.smartcare.hospital.repository.DoctorRepository;
 import com.smartcare.hospital.repository.LaboratoryTestRepository;
 import com.smartcare.hospital.repository.PatientRepository;
@@ -41,7 +42,7 @@ public class LaboratoryTestService {
 
     public LaboratoryTest getLaboratoryTestById(Long id) {
         return laboratoryTestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Laboratory test not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Laboratory test not found with id: " + id));
     }
 
     public LaboratoryTest updateLaboratoryTest(Long id, LaboratoryTest testDetails) {
@@ -65,7 +66,7 @@ public class LaboratoryTestService {
 
     public List<LaboratoryTest> getPatientLaboratoryHistory(Long patientId) {
         patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + patientId));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
         return laboratoryTestRepository.findByPatientPatientIdOrderByTestDateDesc(patientId);
     }
 
@@ -103,7 +104,7 @@ public class LaboratoryTestService {
             throw new IllegalArgumentException("Patient is required");
         }
         return patientRepository.findById(laboratoryTest.getPatient().getPatientId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Patient not found with id: " + laboratoryTest.getPatient().getPatientId()));
     }
 
@@ -112,7 +113,7 @@ public class LaboratoryTestService {
             throw new IllegalArgumentException("Doctor is required");
         }
         return doctorRepository.findById(laboratoryTest.getDoctor().getDoctorId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Doctor not found with id: " + laboratoryTest.getDoctor().getDoctorId()));
     }
 }

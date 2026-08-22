@@ -3,6 +3,7 @@ package com.smartcare.hospital.service;
 import com.smartcare.hospital.entity.Doctor;
 import com.smartcare.hospital.entity.Patient;
 import com.smartcare.hospital.entity.Treatment;
+import com.smartcare.hospital.exception.ResourceNotFoundException;
 import com.smartcare.hospital.repository.DoctorRepository;
 import com.smartcare.hospital.repository.PatientRepository;
 import com.smartcare.hospital.repository.TreatmentRepository;
@@ -37,7 +38,7 @@ public class TreatmentService {
 
     public Treatment getTreatmentById(Long id) {
         return treatmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Treatment not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Treatment not found with id: " + id));
     }
 
     public Treatment updateTreatment(Long id, Treatment treatmentDetails) {
@@ -58,7 +59,7 @@ public class TreatmentService {
 
     public List<Treatment> getPatientMedicalHistory(Long patientId) {
         patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + patientId));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
         return treatmentRepository.findByPatientPatientIdOrderByTreatmentDateDesc(patientId);
     }
 
@@ -67,7 +68,7 @@ public class TreatmentService {
             throw new IllegalArgumentException("Patient is required");
         }
         return patientRepository.findById(treatment.getPatient().getPatientId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Patient not found with id: " + treatment.getPatient().getPatientId()));
     }
 
@@ -76,7 +77,7 @@ public class TreatmentService {
             throw new IllegalArgumentException("Doctor is required");
         }
         return doctorRepository.findById(treatment.getDoctor().getDoctorId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Doctor not found with id: " + treatment.getDoctor().getDoctorId()));
     }
 }

@@ -2,6 +2,7 @@ package com.smartcare.hospital.service;
 
 import com.smartcare.hospital.entity.Bill;
 import com.smartcare.hospital.entity.Patient;
+import com.smartcare.hospital.exception.ResourceNotFoundException;
 import com.smartcare.hospital.repository.BillRepository;
 import com.smartcare.hospital.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class BillService {
 
     public Bill getBillById(Long id) {
         return billRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bill not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Bill not found with id: " + id));
     }
 
     public Bill updateBill(Long id, Bill billDetails) {
@@ -60,7 +61,7 @@ public class BillService {
 
     public List<Bill> getPatientBills(Long patientId) {
         patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + patientId));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
         return billRepository.findByPatientPatientIdOrderByBillDateDesc(patientId);
     }
 
@@ -111,7 +112,7 @@ public class BillService {
             throw new IllegalArgumentException("Patient is required");
         }
         return patientRepository.findById(bill.getPatient().getPatientId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Patient not found with id: " + bill.getPatient().getPatientId()));
     }
 

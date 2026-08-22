@@ -3,6 +3,9 @@ package com.smartcare.hospital.service;
 import com.smartcare.hospital.entity.Admission;
 import com.smartcare.hospital.entity.Patient;
 import com.smartcare.hospital.entity.Room;
+import com.smartcare.hospital.exception.InvalidOperationException;
+import com.smartcare.hospital.exception.ResourceNotFoundException;
+import com.smartcare.hospital.exception.RoomUnavailableException;
 import com.smartcare.hospital.repository.AdmissionRepository;
 import com.smartcare.hospital.repository.PatientRepository;
 import com.smartcare.hospital.repository.RoomRepository;
@@ -36,7 +39,7 @@ public class AdmissionService {
         Room room = resolveRoom(admission);
         if (!"AVAILABLE".equals(room.getAvailabilityStatus())
                 || admissionRepository.existsByRoomRoomIdAndAdmissionStatus(room.getRoomId(), ADMITTED)) {
-            throw new IllegalStateException("Room is not available");
+            throw new RoomUnavailableException("Room is not available");
         }
 
         admission.setPatient(patient);
@@ -55,12 +58,12 @@ public class AdmissionService {
 
     public Admission getAdmissionById(Long id) {
         return admissionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Admission not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Admission not found with id: " + id));
     }
 
     public List<Admission> getPatientAdmissions(Long patientId) {
         patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + patientId));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
         return admissionRepository.findByPatientPatientIdOrderByAdmissionDateDesc(patientId);
     }
 
@@ -68,7 +71,7 @@ public class AdmissionService {
     public Admission dischargePatient(Long id) {
         Admission admission = getAdmissionById(id);
         if (!ADMITTED.equals(admission.getAdmissionStatus())) {
-            throw new IllegalStateException("Admission is already discharged");
+            throw new InvalidOperationException("Admission is already discharged");
         }
 
         admission.setAdmissionStatus(DISCHARGED);
@@ -83,7 +86,7 @@ public class AdmissionService {
     public void deleteAdmission(Long id) {
         Admission admission = getAdmissionById(id);
         if (ADMITTED.equals(admission.getAdmissionStatus())) {
-            throw new IllegalStateException(
+            throw new InvalidOperationException(
                     "Cannot delete an active admission. Discharge the patient first");
         }
         admissionRepository.delete(admission);
@@ -94,7 +97,7 @@ public class AdmissionService {
             throw new IllegalArgumentException("Patient is required");
         }
         return patientRepository.findById(admission.getPatient().getPatientId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Patient not found with id: " + admission.getPatient().getPatientId()));
     }
 
@@ -103,7 +106,7 @@ public class AdmissionService {
             throw new IllegalArgumentException("Room is required");
         }
         return roomRepository.findById(admission.getRoom().getRoomId())
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Room not found with id: " + admission.getRoom().getRoomId()));
     }
 }
