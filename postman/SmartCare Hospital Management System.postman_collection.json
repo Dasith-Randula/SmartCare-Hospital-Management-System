@@ -1,0 +1,133 @@
+{
+  "info": {
+    "name": "SmartCare Hospital Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "patientId", "value": "1" },
+    { "key": "departmentId", "value": "1" },
+    { "key": "doctorId", "value": "1" },
+    { "key": "roomId", "value": "1" },
+    { "key": "appointmentId", "value": "1" },
+    { "key": "admissionId", "value": "1" },
+    { "key": "treatmentId", "value": "1" },
+    { "key": "labTestId", "value": "1" },
+    { "key": "billId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Patient Management",
+      "item": [
+        { "name": "Create Patient", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Kamal Perera\",\n  \"dateOfBirth\": \"1998-05-15\",\n  \"gender\": \"Male\",\n  \"address\": \"Colombo\",\n  \"contactNumber\": \"0771234567\",\n  \"bloodGroup\": \"A+\",\n  \"emergencyContactName\": \"Nimal Perera\",\n  \"emergencyContactNumber\": \"0712345678\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/patients" } },
+        { "name": "Get All Patients", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/patients" } },
+        { "name": "Get Patient By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/patients/{{patientId}}" } },
+        { "name": "Update Patient", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Kamal Perera\",\n  \"dateOfBirth\": \"1998-05-15\",\n  \"gender\": \"Male\",\n  \"address\": \"Kandy\",\n  \"contactNumber\": \"0771234567\",\n  \"bloodGroup\": \"A+\",\n  \"emergencyContactName\": \"Nimal Perera\",\n  \"emergencyContactNumber\": \"0712345678\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/patients/{{patientId}}" } },
+        { "name": "Search Patients", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/patients/search?name=Kamal" } },
+        { "name": "Delete Patient", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/patients/{{patientId}}" } }
+      ]
+    },
+    {
+      "name": "Department Management",
+      "item": [
+        { "name": "Create Department", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"departmentName\": \"Cardiology\",\n  \"location\": \"Block A - Floor 2\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/departments" } },
+        { "name": "Get All Departments", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/departments" } },
+        { "name": "Get Department By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/departments/{{departmentId}}" } },
+        { "name": "Update Department", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"departmentName\": \"Updated Cardiology\",\n  \"location\": \"Block B - Floor 3\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/departments/{{departmentId}}" } },
+        { "name": "Search Departments", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/departments/search?name=Cardiology" } },
+        { "name": "Assign Department Head Doctor", "request": { "method": "PUT", "header": [], "url": "{{baseUrl}}/api/departments/{{departmentId}}/head-doctor/{{doctorId}}" } },
+        { "name": "Delete Department", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/departments/{{departmentId}}" } }
+      ]
+    },
+    {
+      "name": "Doctor Management",
+      "item": [
+        { "name": "Create Doctor", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"doctorName\": \"Dr. Nimal Silva\",\n  \"specialization\": \"Cardiology\",\n  \"qualification\": \"MBBS, MD\",\n  \"contactNumber\": \"0779876543\",\n  \"consultationFee\": 2500.00,\n  \"departmentId\": {{departmentId}}\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/doctors" } },
+        { "name": "Get All Doctors", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/doctors" } },
+        { "name": "Get Doctor By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/doctors/{{doctorId}}" } },
+        { "name": "Update Doctor", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"doctorName\": \"Dr. Updated Silva\",\n  \"specialization\": \"Neurology\",\n  \"qualification\": \"MBBS, MD\",\n  \"contactNumber\": \"0779876543\",\n  \"consultationFee\": 3000.00,\n  \"departmentId\": {{departmentId}}\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/doctors/{{doctorId}}" } },
+        { "name": "Search Doctors", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/doctors/search?name=Nimal" } },
+        { "name": "Get Doctors By Department", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/doctors/department/{{departmentId}}" } },
+        { "name": "Delete Doctor", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/doctors/{{doctorId}}" } }
+      ]
+    },
+    {
+      "name": "Room Management",
+      "item": [
+        { "name": "Create Room", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"roomNumber\": \"101\",\n  \"roomCategory\": \"GENERAL_WARD\",\n  \"dailyCharge\": 1500.00\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/rooms" } },
+        { "name": "Get All Rooms", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rooms" } },
+        { "name": "Get Room By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rooms/{{roomId}}" } },
+        { "name": "Update Room", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"roomNumber\": \"101\",\n  \"roomCategory\": \"GENERAL_WARD\",\n  \"dailyCharge\": 1750.00\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/rooms/{{roomId}}" } },
+        { "name": "Get Available Rooms", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rooms/available" } },
+        { "name": "Get Rooms By Category", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rooms/category/GENERAL_WARD" } },
+        { "name": "Delete Room", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/rooms/{{roomId}}" } }
+      ]
+    },
+    {
+      "name": "Appointment Management",
+      "item": [
+        { "name": "Create Appointment", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"doctorId\": {{doctorId}},\n  \"appointmentDate\": \"2026-08-25\",\n  \"appointmentTime\": \"10:30:00\",\n  \"consultationRoom\": \"Room 101\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/appointments" } },
+        { "name": "Get All Appointments", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/appointments" } },
+        { "name": "Get Appointment By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/appointments/{{appointmentId}}" } },
+        { "name": "Update Appointment", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"doctorId\": {{doctorId}},\n  \"appointmentDate\": \"2026-08-25\",\n  \"appointmentTime\": \"11:00:00\",\n  \"consultationRoom\": \"Room 101\",\n  \"appointmentStatus\": \"SCHEDULED\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/appointments/{{appointmentId}}" } },
+        { "name": "Cancel Appointment", "request": { "method": "PATCH", "header": [], "url": "{{baseUrl}}/api/appointments/{{appointmentId}}/cancel" } },
+        { "name": "Get Doctor Schedule", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/appointments/doctor/{{doctorId}}/schedule?date=2026-08-25" } },
+        { "name": "Delete Appointment", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/appointments/{{appointmentId}}" } }
+      ]
+    },
+    {
+      "name": "Admission Management",
+      "item": [
+        { "name": "Create Admission", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"roomId\": {{roomId}},\n  \"admissionDate\": \"2026-08-20\",\n  \"bedNumber\": \"B101\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/admissions" } },
+        { "name": "Get All Admissions", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/admissions" } },
+        { "name": "Get Admission By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/admissions/{{admissionId}}" } },
+        { "name": "Get Patient Admissions", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/admissions/patient/{{patientId}}" } },
+        { "name": "Discharge Patient", "request": { "method": "PATCH", "header": [], "url": "{{baseUrl}}/api/admissions/{{admissionId}}/discharge" } },
+        { "name": "Delete Admission", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/admissions/{{admissionId}}" } }
+      ]
+    },
+    {
+      "name": "Treatment Management",
+      "item": [
+        { "name": "Create Treatment", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"doctorId\": {{doctorId}},\n  \"diagnosis\": \"Hypertension\",\n  \"prescription\": \"Amlodipine 5mg once daily\",\n  \"treatmentNotes\": \"Follow-up in two weeks\",\n  \"treatmentDate\": \"2026-08-20\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/treatments" } },
+        { "name": "Get All Treatments", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/treatments" } },
+        { "name": "Get Treatment By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/treatments/{{treatmentId}}" } },
+        { "name": "Update Treatment", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"doctorId\": {{doctorId}},\n  \"diagnosis\": \"Controlled Hypertension\",\n  \"prescription\": \"Continue Amlodipine 5mg\",\n  \"treatmentNotes\": \"Condition stable\",\n  \"treatmentDate\": \"2026-08-20\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/treatments/{{treatmentId}}" } },
+        { "name": "Get Patient Medical History", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/treatments/patient/{{patientId}}/history" } },
+        { "name": "Delete Treatment", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/treatments/{{treatmentId}}" } }
+      ]
+    },
+    {
+      "name": "Laboratory Test Management",
+      "item": [
+        { "name": "Create Laboratory Test", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"doctorId\": {{doctorId}},\n  \"testName\": \"Blood Test\",\n  \"testDate\": \"2026-08-20\",\n  \"testResult\": \"Normal\",\n  \"technicianName\": \"S. Fernando\",\n  \"testStatus\": \"COMPLETED\",\n  \"testCharge\": 1200.00\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/laboratory-tests" } },
+        { "name": "Get All Laboratory Tests", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/laboratory-tests" } },
+        { "name": "Get Laboratory Test By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/laboratory-tests/{{labTestId}}" } },
+        { "name": "Update Laboratory Test", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"doctorId\": {{doctorId}},\n  \"testName\": \"Blood Test\",\n  \"testDate\": \"2026-08-20\",\n  \"testResult\": \"Normal\",\n  \"technicianName\": \"S. Fernando\",\n  \"testStatus\": \"COMPLETED\",\n  \"testCharge\": 1200.00\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/laboratory-tests/{{labTestId}}" } },
+        { "name": "Get Patient Laboratory History", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/laboratory-tests/patient/{{patientId}}/history" } },
+        { "name": "Search Laboratory Tests By Status And Date Range", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/laboratory-tests/search?status=COMPLETED&startDate=2026-08-01&endDate=2026-08-31" } },
+        { "name": "Delete Laboratory Test", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/laboratory-tests/{{labTestId}}" } }
+      ]
+    },
+    {
+      "name": "Bill Management",
+      "item": [
+        { "name": "Create Bill", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"billDate\": \"2026-08-20\",\n  \"consultationCharge\": 2500.00,\n  \"roomCharge\": 1500.00,\n  \"laboratoryCharge\": 1200.00,\n  \"medicineCharge\": 800.00,\n  \"paymentStatus\": \"UNPAID\",\n  \"paymentMethod\": \"CASH\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/bills" } },
+        { "name": "Get All Bills", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/bills" } },
+        { "name": "Get Bill By ID", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/bills/{{billId}}" } },
+        { "name": "Update Bill", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"patientId\": {{patientId}},\n  \"billDate\": \"2026-08-20\",\n  \"consultationCharge\": 2500.00,\n  \"roomCharge\": 1500.00,\n  \"laboratoryCharge\": 1200.00,\n  \"medicineCharge\": 900.00,\n  \"paymentStatus\": \"UNPAID\",\n  \"paymentMethod\": \"CASH\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/bills/{{billId}}" } },
+        { "name": "Get Patient Bills", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/bills/patient/{{patientId}}" } },
+        { "name": "Get Bills By Payment Status", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/bills/status/UNPAID" } },
+        { "name": "Mark Bill As Paid", "request": { "method": "PATCH", "header": [], "url": "{{baseUrl}}/api/bills/{{billId}}/pay?paymentMethod=CASH" } },
+        { "name": "Delete Bill", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/bills/{{billId}}" } }
+      ]
+    },
+    {
+      "name": "Error Testing",
+      "item": [
+        { "name": "Patient Not Found", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/patients/9999" } },
+        { "name": "Patient Validation Error", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"\",\n  \"dateOfBirth\": \"2000-01-10\",\n  \"gender\": \"\",\n  \"contactNumber\": \"123\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/patients" } }
+      ]
+    }
+  ]
+}
